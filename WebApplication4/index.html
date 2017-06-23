@@ -46,7 +46,7 @@
         app.controller('myctrl', function ($scope, $http) {
 
             $http({
-                method: 'GET',
+                method: 'PUT',
                 url: 'api/doit'
             }).then(function successCallback(response) {
                 $scope.form1 = response.data;
