@@ -1,0 +1,101 @@
+﻿<html data-ng-app="myapp">
+    <head>
+        <title>
+            Check
+        </title>
+       
+    </head>
+    <body data-ng-controller="myctrl" >
+        <form name=form_one method="get">
+        <p>FullName: <input type="text" name="fullname" id="fullname" ng-model="fullname"/></p>
+        <p>Age:<input type="text" id="age" ng-model="age"/></p>
+        <p>Email:<input type="text" id="email" ng-model="email" /></p>
+
+        <input type="submit" ng-click="create()" name="signup" value="SignUp" />
+        <input type="submit" ng-click="update()" name="update" value="Update" />
+    </form>
+
+        <br />
+
+        <div data-ng-app="myapp" data-ng-controller="myctrl"> 
+            <table>
+                <tr>
+                     <th>ID</th>
+                     <th> FullName</th>
+                     <th> Age</th>
+                     <th> Email</th>
+                     <th></th>
+                </tr>
+                <tr ng-repeat="x in form1">
+                    <td>{{x.ID}}</td>
+                    <td>{{ x.FullName }}</td>
+                    <td>{{ x.Age }}</td>
+                    <td>{{ x.Email }}</td>
+                    <td> <input type="submit" ng-click="edit(x.ID)" name="edit" value="EDIT" />
+                        <input type="submit" ng-click="delete()" name="delete" value="DELETE" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script>
+        var app = angular.module('myapp', []);
+        app.controller('myctrl', function ($scope, $http) {
+
+            $http({
+                method: 'GET',
+                url: 'api/doit'
+            }).then(function successCallback(response) {
+                $scope.form1 = response.data;
+                });
+         
+
+
+            $scope.create = function () {
+                alert('You have signed in successfully');
+                var sendit = {  Fullname: $scope.fullname, Age: $scope.age, Email: $scope.email };
+                $http({
+                    method: 'POST',
+                    url: 'api/createnew',
+                    data: sendit
+                    //headers: { 'Content-Type': 'application/json' }
+                }).then(function successCallback(response) {
+                        $scope.content = response.data;
+
+                        location.href = "/index.html";
+                        location.reload(forceGet);
+                    });
+            
+            };
+            
+            $scope.edit = function (ID) {
+                $http({
+                    method: 'GET',
+                    url: 'api/sendID/' + ID,
+                   
+                }).then(function successCallback(response) {
+                    form_one.fullname.value = response.data.FullName;
+                    form_one.age.value = response.data.Age;
+                    form_one.email.value = response.data.Email;
+                    //location.href = "/index.html";
+                    //location.reload(forceGet);
+                });
+            }
+
+            $scope.update() = function (ID) {
+                $http({
+                    method: '',
+                    url: 'api/updateit'
+                }).then(function successCallback(response) {
+
+                });
+            };
+
+        });
+       
+            
+     </script>
+</html>     
